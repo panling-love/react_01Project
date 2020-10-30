@@ -2,20 +2,23 @@ import React, { Component } from 'react'
 //CSS
 import './index.scss'
 //ANTD
-import { Form, Input, Button ,Row, Col } from 'antd';
-import { UserOutlined ,LockOutlined} from '@ant-design/icons';
+import { Form, Input, Button ,Row, Col,message } from 'antd';
+import { UserOutlined ,LockOutlined,PoweroffOutlined} from '@ant-design/icons';
 //API
-import {Login} from '../../api/account'
+import {Login,GetCode} from '../../api/account'
 
 export default class LoginForm extends Component {
     constructor(props){
         super(props)
-        this.state = {}
+        this.state = {
+            username:'',
+            code_button_disabled:true,
+            code_button_loading:false,
+            code_button_text:'获取验证码'
+        }
     }
     onFinish = ()=>{
         Login().then(res=>{
-            debugger;
-            console.log(process.env)
             console.log(res)
         }).catch(err=>{
             console.log(err)
@@ -23,6 +26,42 @@ export default class LoginForm extends Component {
     }
     toggleFrom = ()=>{
         this.props.chaneFrom('resgister');
+    }
+    setUsername = (e)=>{
+        let username = e.target.value;
+        if(username!==''){
+            this.setState({
+                code_button_disabled:false,
+            })
+        }else{
+            this.setState({
+                code_button_disabled:true
+            })
+        }
+        this.setState({
+            username
+        })
+    }
+    getCode = ()=>{
+        if(!this.state.username){
+            message.warning('用户名不存在！',1);
+            return false;
+        }
+        this.setState({
+            code_button_text:'发送中',
+            code_button_loading:true
+        })
+        const getCodeParams = {
+            username:this.state.username,
+            modele:'login'
+        }
+        GetCode(getCodeParams).then(res=>{
+            console.log(60);
+        }).catch(err=>{
+            this.setState({
+                code_button_text:'重新发送'
+            })
+        })
     }
     render() {
         return (
@@ -43,7 +82,7 @@ export default class LoginForm extends Component {
                             name="username"
                             rules={[{ required: true, message: 'Please input your Username!' }]}
                         >
-                            <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
+                            <Input value={this.state.username} onChange={this.setUsername} prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
                         </Form.Item>
 
                         <Form.Item
@@ -70,7 +109,7 @@ export default class LoginForm extends Component {
                                 <Col span={16}>
                                 <Input prefix={<LockOutlined className="site-form-item-icon"  />} placeholder="yzm" />
                                 </Col>
-                                <Col span={8}><Button type='danger' className='yzm' block>获取验证码</Button></Col>
+                    <Col span={8}><Button type='danger' className='yzm' block disabled={this.state.code_button_disabled}  loading={this.state.code_button_loading} onClick={this.getCode}>{this.state.code_button_text}</Button></Col>
                             </Row>
                         </Form.Item>
 

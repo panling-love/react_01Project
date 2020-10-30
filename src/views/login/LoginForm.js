@@ -56,7 +56,26 @@ export default class LoginForm extends Component {
             modele:'login'
         }
         GetCode(getCodeParams).then(res=>{
-            console.log(60);
+            let time = 60;
+            timer = null;
+            this.setState({
+                code_button_loading:false,
+                code_button_disabled:true,
+                code_button_text:`${time}S`
+            })
+            var timer = setInterval(()=>{
+                this.setState({
+                    code_button_text:`${time}S`
+                })
+                time -= 1;
+                if(time<=0){
+                    this.setState({
+                        code_button_text:'重新获取'
+                    })
+                    clearInterval(timer);
+                    return false;
+                }
+            },1000)
         }).catch(err=>{
             this.setState({
                 code_button_text:'重新发送'

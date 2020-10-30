@@ -1,8 +1,11 @@
 import React, { Component } from 'react'
+//CSS
+import './index.scss'
+//ANTD
 import { Form, Input, Button ,Row, Col } from 'antd';
 import { UserOutlined ,LockOutlined} from '@ant-design/icons';
-import './index.scss'
-
+//API
+import {Login} from '../../api/account'
 
 export default class LoginForm extends Component {
     constructor(props){
@@ -10,7 +13,11 @@ export default class LoginForm extends Component {
         this.state = {}
     }
     onFinish = ()=>{
-        console.log('Received values of form: ');
+        Login().then(res=>{
+            console.log(res)
+        }).catch(err=>{
+            console.log(err)
+        })
     }
     toggleFrom = ()=>{
         this.props.chaneFrom('resgister');
@@ -42,7 +49,7 @@ export default class LoginForm extends Component {
                             rules={[
                                 () => ({
                                     validator(rule, value) {
-                                      if (!value || value.length>=6&&value.length<=20) {
+                                      if (!value || value.length>=6) {
                                         return Promise.resolve();
                                       }
                                       return Promise.reject('The two passwords that you entered do not match!');

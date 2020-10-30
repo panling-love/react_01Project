@@ -42,7 +42,7 @@ export default class RegisterForm extends Component {
                             rules={[
                                 () => ({
                                     validator(rule, value) {
-                                      if (!value || value.length>6&&value.length<20) {
+                                      if (!value || value.length>6) {
                                         return Promise.resolve();
                                       }
                                       return Promise.reject('The two passwords that you entered do not match!');

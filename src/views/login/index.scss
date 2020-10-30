@@ -1,0 +1,28 @@
+body{
+    background-color: #001529 !important;
+}
+.form_wrap{
+    width: 300px;
+    margin: auto;
+    height: 90vh;
+    display: flex;
+    align-items: center;
+    >div{
+        width: 100%;
+    }
+}
+.form_header{
+    width: 300px;
+    height: 56px;
+    line-height: 56px;
+    color:#fff;
+    .login_button{
+        font-size: 16px;
+        float: left;
+    }
+    .new{
+        font-size: 12px;
+        float: right;
+        opacity: .3;
+    }
+}

@@ -2,12 +2,13 @@ import axios from 'axios'
 
 //第一步 创建实例
 const service = axios.create({
-    baseURL: 'devApi',
+    baseURL: process.env.REACT_APP_API ,//根据开发环境来替换不同的路径
     timeout: 1000,
     headers: {'X-Custom-Header': 'foobar'}
   });
 //第二步 请求拦截
 service.interceptors.request.use(function(config){
+    console.log(process.env)
     //在发送请求之前做什么？
     return config;
 },function(err){

@@ -14,6 +14,8 @@ export default class LoginForm extends Component {
     }
     onFinish = ()=>{
         Login().then(res=>{
+            debugger;
+            console.log(process.env)
             console.log(res)
         }).catch(err=>{
             console.log(err)

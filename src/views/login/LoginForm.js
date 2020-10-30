@@ -12,9 +12,6 @@ export default class LoginForm extends Component {
     onFinish = ()=>{
         console.log('Received values of form: ');
     }
-    loginHandler(){
-        alert('111')
-    }
     toggleFrom = ()=>{
         this.props.chaneFrom('resgister');
     }
@@ -42,8 +39,17 @@ export default class LoginForm extends Component {
 
                         <Form.Item
                             name="password"
-                            rules={[{ required: true, message: 'Please input your password!' }]}
-                        >
+                            rules={[
+                                () => ({
+                                    validator(rule, value) {
+                                      if (!value || value.length>=6&&value.length<=20) {
+                                        return Promise.resolve();
+                                      }
+                                      return Promise.reject('The two passwords that you entered do not match!');
+                                    },
+                                  }),
+                        ]}
+                        > 
                             <Input prefix={<LockOutlined className="site-form-item-icon" />} placeholder="password" />
                         </Form.Item>
              
@@ -60,7 +66,7 @@ export default class LoginForm extends Component {
                         </Form.Item>
 
                         <Form.Item>
-                            <Button onClick={this.loginHandler} type="primary" htmlType="submit" className='submit' className="login-form-button" block>
+                            <Button type="primary" htmlType="submit" className='submit' className="login-form-button" block>
                             登录
                             </Button>
                         </Form.Item>

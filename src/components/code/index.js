@@ -15,7 +15,8 @@ export default class Code extends Component {
             username:props.username,
             code_button_disabled:true,
             code_button_loading:false,
-            button_text:'获取验证码'
+            button_text:'获取验证码',
+            modele:props.modele
         }
     }
     componentWillReceiveProps({username}){
@@ -47,10 +48,9 @@ export default class Code extends Component {
         })
         const getCodeParams = {
             username:this.state.username,
-            modele:'login'
+            modele:this.state.modele
         }
-        GetCode(getCodeParams).then(res=>{
-            let time = 60;
+        let time = 60;
             timer = setInterval(()=>{
                 this.setState({
                     code_button_loading:false,
@@ -67,6 +67,8 @@ export default class Code extends Component {
                     return false;
                 }
             },1000)
+        GetCode(getCodeParams).then(res=>{
+            message.success(res.data.message);
         }).catch(err=>{
             this.setState({
                 button_text:'重新发送'

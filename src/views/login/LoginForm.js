@@ -8,16 +8,27 @@ import { UserOutlined ,LockOutlined} from '@ant-design/icons';
 import {Login} from '../../api/account'
 //components
 import Code from '../../components/code/index'
+//MD5
+import CryptoJs from 'crypto-js'
 
 export default class LoginForm extends Component {
     constructor(props){
         super(props)
         this.state = {
-            username:''
+            username:'',
+            modele:'login',
+            code:'',
+            password:''
         }
     }
     onFinish = ()=>{
-        Login().then(res=>{
+        const LoginParams = {
+            username:this.state.username,
+            password:CryptoJs.MD5(this.state.password),
+            code:this.state.code
+        }
+        console.log(this.state.password)
+        Login(LoginParams).then(res=>{
             console.log(res)
         }).catch(err=>{
             console.log(err)
@@ -32,7 +43,20 @@ export default class LoginForm extends Component {
             username
         })
     }
+    setPassword = (e)=>{
+        let password = e.target.value;
+        this.setState({
+            password
+        })
+    }
+    setCode = (e)=>{
+        let code = e.target.value;
+        this.setState({
+            code
+        })
+    }
     render() {
+        const {username,modele} = this.state;
         return (
             <div className='form_wrap'>
                 <div>
@@ -56,18 +80,9 @@ export default class LoginForm extends Component {
 
                         <Form.Item
                             name="password"
-                            rules={[
-                                () => ({
-                                    validator(rule, value) {
-                                      if (!value || value.length>=6) {
-                                        return Promise.resolve();
-                                      }
-                                      return Promise.reject('The two passwords that you entered do not match!');
-                                    },
-                                  }),
-                        ]}
+                            rules={[{ required: true, message: 'Please input your password!' }]}
                         > 
-                            <Input prefix={<LockOutlined className="site-form-item-icon" />} placeholder="password" />
+                            <Input type='password' onChange={this.setPassword} prefix={<LockOutlined className="site-form-item-icon" />} placeholder="password" />
                         </Form.Item>
              
                         <Form.Item
@@ -76,10 +91,10 @@ export default class LoginForm extends Component {
                         >
                             <Row gutter={16}>
                                 <Col span={16}>
-                                <Input prefix={<LockOutlined className="site-form-item-icon"  />} placeholder="yzm" />
+                                <Input onChange={this.setCode} prefix={<LockOutlined className="site-form-item-icon"  />} placeholder="yzm" />
                                 </Col>
-                    <Col span={8}>
-                        <Code username = {this.state.username} />
+                             <Col span={8}>
+                        <Code username = {username} modele = {modele} />
                         </Col>
                             </Row>
                         </Form.Item>

@@ -2,18 +2,27 @@ import React, { Component } from 'react'
 import { Form, Input, Button ,Row, Col } from 'antd';
 import { UserOutlined ,LockOutlined,WhatsAppOutlined} from '@ant-design/icons';
 import './index.scss'
-
+//components
+import Code from '../../components/code/index'
 
 export default class RegisterForm extends Component {
     constructor(props){
         super(props)
-        this.state = {}
+        this.state = {
+            username:''
+        }
     }
     onFinish = ()=>{
         console.log('Received values of form: ');
     }
     toggleFrom = ()=>{
         this.props.chaneFrom('login');
+    }
+    setUsername = (e)=>{
+        let username = e.target.value;
+        this.setState({
+            username
+        })
     }
     render() {
         return (
@@ -30,11 +39,11 @@ export default class RegisterForm extends Component {
                     initialValues={{ remember: true }}
                     onFinish={this.onFinish}
                     >
-                        <Form.Item
+                       <Form.Item
                             name="username"
                             rules={[{ required: true, message: 'Please input your Username!' }]}
                         >
-                            <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
+                            <Input value={this.state.username} onChange={this.setUsername} prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
                         </Form.Item>
 
                         <Form.Item
@@ -83,7 +92,7 @@ export default class RegisterForm extends Component {
                                 <Col span={16}>
                                 <Input prefix={<LockOutlined className="site-form-item-icon"  />} placeholder="yzm" />
                                 </Col>
-                                <Col span={8}><Button type='danger' className='yzm' block>获取验证码</Button></Col>
+                                <Col span={8}><Code username = {this.state.username} /></Col>
                             </Row>
                         </Form.Item>
 
